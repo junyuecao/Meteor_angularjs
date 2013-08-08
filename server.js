@@ -10,13 +10,13 @@ __meteor_bootstrap__.app
       // Need to create a Fiber since we're using synchronous http calls
       Fiber(function() {
       	try{
-      	 var code = fs.readFileSync(path.resolve('bundle/app.html'));
+      	 var code = fs.readFileSync(path.resolve('app.html'));
         }catch(e){
           var code = fs.readFileSync(path.resolve('.meteor/local/build/app.html'));
         }
       	var angular = "";
         try{ 
-      		angular = fs.readFileSync(path.resolve('bundle/static/angular.html'));
+      		angular = fs.readFileSync(path.resolve('static/angular.html'));
         }catch(e){
           if(fs.existsSync("public/angular.html")){
             angular = fs.readFileSync(path.resolve('public/angular.html'));
@@ -28,7 +28,8 @@ __meteor_bootstrap__.app
       	
       	code = new String(code);
       //	console.log((new String(angular)).join());
-      	code = code.replace("<body>",new String(angular));
+      	code = code.replace("<body>", "<body>" + new String(angular));
+      	code = code.replace("<head>", "<head> <meta charset='utf-8'>")
 		code = code.replace("<html##HTML_ATTRIBUTES##>",'<html ng-app="meteorapp">');
 		if (typeof __meteor_runtime_config__ !== 'undefined') {
 		  code = code.replace(
